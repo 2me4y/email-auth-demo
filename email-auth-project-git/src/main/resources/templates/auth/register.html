@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — Java EE Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body class="auth-body">
+
+<div class="auth-bg">
+    <div class="auth-grid"></div>
+</div>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-badge">Java EE Course</div>
+            <h1 class="auth-title">Регистрация</h1>
+            <p class="auth-subtitle">SMTP · Async · Spring Security</p>
+        </div>
+
+        <!-- Блок ошибки (из GlobalExceptionHandler или ручной проверки) -->
+        <div th:if="${errorMessage}" class="alert alert-error">
+            <span class="alert-icon">✗</span>
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Форма регистрации — th:action + th:object для привязки к DTO -->
+        <form th:action="@{/auth/register}" th:object="${registerDto}" method="post" class="auth-form">
+
+            <!-- Поле: Имя -->
+            <div class="form-group" th:classappend="${#fields.hasErrors('fullName')} ? 'has-error' : ''">
+                <label for="fullName" class="form-label">Полное имя</label>
+                <input type="text"
+                       id="fullName"
+                       th:field="*{fullName}"
+                       class="form-input"
+                       placeholder="Иван Иванов"
+                       autocomplete="name">
+                <!-- Ошибки Bean Validation -->
+                <span th:if="${#fields.hasErrors('fullName')}"
+                      th:errors="*{fullName}"
+                      class="field-error"></span>
+            </div>
+
+            <!-- Поле: Email -->
+            <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error' : ''">
+                <label for="email" class="form-label">Email</label>
+                <input type="email"
+                       id="email"
+                       th:field="*{email}"
+                       class="form-input"
+                       placeholder="you@example.com"
+                       autocomplete="email">
+                <span th:if="${#fields.hasErrors('email')}"
+                      th:errors="*{email}"
+                      class="field-error"></span>
+            </div>
+
+            <!-- Поле: Пароль -->
+            <div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error' : ''">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password"
+                       id="password"
+                       th:field="*{password}"
+                       class="form-input"
+                       placeholder="Минимум 6 символов"
+                       autocomplete="new-password">
+                <span th:if="${#fields.hasErrors('password')}"
+                      th:errors="*{password}"
+                      class="field-error"></span>
+            </div>
+
+            <!-- Поле: Подтверждение пароля -->
+            <div class="form-group" th:classappend="${#fields.hasErrors('confirmPassword')} ? 'has-error' : ''">
+                <label for="confirmPassword" class="form-label">Повторите пароль</label>
+                <input type="password"
+                       id="confirmPassword"
+                       th:field="*{confirmPassword}"
+                       class="form-input"
+                       placeholder="Повторите пароль"
+                       autocomplete="new-password">
+                <span th:if="${#fields.hasErrors('confirmPassword')}"
+                      th:errors="*{confirmPassword}"
+                      class="field-error"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                <span class="btn-text">Зарегистрироваться</span>
+                <span class="btn-arrow">→</span>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Уже есть аккаунт?
+            <a th:href="@{/auth/login}" class="auth-link">Войти</a>
+        </div>
+
+        <!-- Учебная подсказка -->
+        <div class="code-hint">
+            <div class="code-hint-title">// Что происходит при отправке формы:</div>
+            <div class="code-hint-line"><span class="code-kw">1.</span> Bean Validation (@Valid)</div>
+            <div class="code-hint-line"><span class="code-kw">2.</span> BCrypt хеширование пароля</div>
+            <div class="code-hint-line"><span class="code-kw">3.</span> Сохранение в H2 БД</div>
+            <div class="code-hint-line"><span class="code-kw">4.</span> <span class="code-async">@Async</span> SMTP → письмо в фоне</div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

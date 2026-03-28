@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — Java EE Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body class="auth-body">
+
+<div class="auth-bg">
+    <div class="auth-grid"></div>
+</div>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-badge">Java EE Course</div>
+            <h1 class="auth-title">Вход</h1>
+            <p class="auth-subtitle">Spring Security · BCrypt</p>
+        </div>
+
+        <!-- Ошибка входа -->
+        <div th:if="${errorMessage}" class="alert alert-error">
+            <span class="alert-icon">✗</span>
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Успешный выход -->
+        <div th:if="${logoutMessage}" class="alert alert-success">
+            <span class="alert-icon">✓</span>
+            <span th:text="${logoutMessage}"></span>
+        </div>
+
+        <!-- Flash-сообщение после регистрации -->
+        <div th:if="${successMessage}" class="alert alert-success">
+            <span class="alert-icon">✓</span>
+            <span th:text="${successMessage}"></span>
+        </div>
+
+        <!--
+            Spring Security обрабатывает /auth/login POST сам.
+            Поля ДОЛЖНЫ называться "username" и "password".
+        -->
+        <form th:action="@{/auth/login}" method="post" class="auth-form">
+
+            <div class="form-group">
+                <label for="username" class="form-label">Email</label>
+                <input type="email"
+                       id="username"
+                       name="username"
+                       class="form-input"
+                       placeholder="you@example.com"
+                       required
+                       autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       class="form-input"
+                       placeholder="Ваш пароль"
+                       required
+                       autocomplete="current-password">
+            </div>
+
+            <!-- CSRF токен — Spring Security требует его для POST -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <button type="submit" class="btn btn-primary btn-full">
+                <span class="btn-text">Войти</span>
+                <span class="btn-arrow">→</span>
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            Нет аккаунта?
+            <a th:href="@{/auth/register}" class="auth-link">Зарегистрироваться</a>
+        </div>
+
+        <div class="code-hint">
+            <div class="code-hint-title">// Spring Security flow:</div>
+            <div class="code-hint-line"><span class="code-kw">1.</span> POST /auth/login</div>
+            <div class="code-hint-line"><span class="code-kw">2.</span> UserDetailsServiceImpl.loadUserByUsername()</div>
+            <div class="code-hint-line"><span class="code-kw">3.</span> BCrypt.matches(raw, hashed)</div>
+            <div class="code-hint-line"><span class="code-kw">4.</span> user.isEnabled() → проверка</div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

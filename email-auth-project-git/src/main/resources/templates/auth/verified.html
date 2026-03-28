@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Email подтверждён — Java EE Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body class="auth-body">
+
+<div class="auth-bg">
+    <div class="auth-grid"></div>
+</div>
+
+<div class="auth-container">
+    <div class="auth-card" style="text-align: center;">
+
+        <div class="status-icon status-success">✓</div>
+
+        <h1 class="auth-title" style="margin-top: 1rem;">Email подтверждён!</h1>
+
+        <p style="color: var(--text-muted); margin: 1rem 0 2rem;" th:text="${message}">
+            Аккаунт активирован.
+        </p>
+
+        <div class="code-hint" style="text-align:left">
+            <div class="code-hint-title">// Что произошло:</div>
+            <div class="code-hint-line"><span class="code-kw">1.</span> Токен найден в БД</div>
+            <div class="code-hint-line"><span class="code-kw">2.</span> tokenExpiry проверен</div>
+            <div class="code-hint-line"><span class="code-kw">3.</span> user.setEnabled(true)</div>
+            <div class="code-hint-line"><span class="code-kw">4.</span> <span class="code-async">@Async</span> welcome email отправлен</div>
+        </div>
+
+        <a th:href="@{/auth/login}" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-block;">
+            Войти в систему →
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
